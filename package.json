@@ -2,10 +2,10 @@
   "name": "reddit_amu",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "relations.js",
   "type": "module",
   "scripts": {
-    "start": "node --watch nogalti.js --env-file .env",
+    "start": "node --watch relations.js --env-file .env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
