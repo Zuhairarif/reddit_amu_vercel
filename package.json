@@ -5,7 +5,7 @@
   "main": "relations.js",
   "type": "module",
   "scripts": {
-    "start": "node --watch relations.js --env-file .env",
+    "start": "node --watch ./api/relations.js --env-file .env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
