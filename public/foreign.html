@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMU's Personal Reddit App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #ffffff !important;
+        }
+        .thread-container {
+            margin-top: 20px;
+        }
+        .thread {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #ffffff;
+            margin-bottom: 15px;
+        }
+        .thread .meta {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .comment {
+            margin-left: 20px;
+            padding: 10px;
+            border-left: 3px solid #dee2e6;
+            margin-top: 10px;
+        }
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .logo-image {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="logo/foreign.png" style="height: 100px; width: 400px;" alt="Logo" class="logo-image">
+
+   
+    <!-- Tagline -->
+    <header class="bg-light py-3 text-center">
+        <h1 class="display-5">AMU's Personal Reddit App</h1>
+        <p class="lead">We promote freedom of speech and anonymous discussions</p>
+    </header>
+
+    <!-- Content -->
+    <div class="container thread-container">
+        <!-- Search Bar -->
+        <div class="mb-4">
+            <h3>Search Discussions</h3>
+            <input type="text" id="search-bar" class="form-control" placeholder="Search threads or comments..." oninput="filterContent()">
+        </div>
+
+        <!-- Search Results Section -->
+        <div class="mb-4" id="search-results" style="display: none;">
+            <h3>Search Results</h3>
+            <div id="results-container"></div>
+        </div>
+
+        <!-- New Thread Section -->
+        <div class="mb-4">
+            <h3>Start a New Discussion</h3>
+            <form id="new-thread-form">
+                <div class="mb-3">
+                    <label for="thread-title" class="form-label">Question</label>
+                    <input type="text" class="form-control" id="thread-title" placeholder="Ask your question">
+                </div>
+                <div class="mb-3">
+                    <label for="thread-content" class="form-label">Details</label>
+                    <textarea class="form-control" id="thread-content" rows="3" placeholder="Provide some details about your question"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="postThread()">Post</button>
+            </form>
+        </div>
+
+        <!-- Thread List Section -->
+        <h3>Recent Discussions</h3>
+        <div id="threads">
+            <!-- Threads will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 AMU's Personal Reddit App. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const threads = JSON.parse(localStorage.getItem('threads')) || [];
+
+        function getRandomID() {
+            return 'User-' + Math.floor(1000 + Math.random() * 9000);
+        }
+
+        function postThread() {
+            const title = document.getElementById('thread-title').value;
+            const content = document.getElementById('thread-content').value;
+
+            if (title && content) {
+                const thread = {
+                    id: getRandomID(),
+                    title: title,
+                    content: content,
+                    timestamp: new Date().toLocaleString(),
+                    comments: []
+                };
+                threads.unshift(thread);
+                localStorage.setItem('threads', JSON.stringify(threads));
+                renderThreads();
+                document.getElementById('new-thread-form').reset();
+            } else {
+                alert('Please fill out both the question and details fields.');
+            }
+        }
+
+        function postComment(threadIndex, commentContent) {
+            if (commentContent) {
+                const comment = {
+                    id: getRandomID(),
+                    content: commentContent,
+                    timestamp: new Date().toLocaleString()
+                };
+                threads[threadIndex].comments.push(comment);
+                localStorage.setItem('threads', JSON.stringify(threads));
+                renderThreads();
+            }
+        }
+
+        function highlightText(text, query) {
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function filterContent() {
+            const query = document.getElementById('search-bar').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('results-container');
+            const searchResults = document.getElementById('search-results');
+            resultsContainer.innerHTML = '';
+
+            if (query) {
+                searchResults.style.display = 'block';
+                threads.forEach(thread => {
+                    const threadTitleMatch = thread.title.toLowerCase().includes(query);
+                    const threadContentMatch = thread.content.toLowerCase().includes(query);
+                    const commentMatches = thread.comments.filter(comment => comment.content.toLowerCase().includes(query));
+
+                    if (threadTitleMatch || threadContentMatch || commentMatches.length > 0) {
+                        const threadElement = document.createElement('div');
+                        threadElement.classList.add('thread');
+
+                        const highlightedTitle = highlightText(thread.title, query);
+                        const highlightedContent = highlightText(thread.content, query);
+
+                        const highlightedComments = thread.comments.map(comment => {
+                            const isCommentHighlighted = comment.content.toLowerCase().includes(query);
+                            return `
+                                <div class="comment">
+                                    <p>${isCommentHighlighted ? highlightText(comment.content, query) : comment.content}</p>
+                                    <p class="meta">Posted by ${comment.id} on: ${comment.timestamp}</p>
+                                </div>
+                            `;
+                        }).join('');
+
+                        threadElement.innerHTML = `
+                            <h5>${highlightedTitle}</h5>
+                            <p>${highlightedContent}</p>
+                            <p class="meta">Posted by ${thread.id} on: ${thread.timestamp}</p>
+                            ${highlightedComments}
+                        `;
+
+                        resultsContainer.appendChild(threadElement);
+                    }
+                });
+            } else {
+                searchResults.style.display = 'none';
+            }
+        }
+
+        function renderThreads() {
+            const threadsContainer = document.getElementById('threads');
+            threadsContainer.innerHTML = '';
+
+            threads.forEach((thread, index) => {
+                const threadElement = document.createElement('div');
+                threadElement.classList.add('thread');
+
+                const commentSection = thread.comments.map(comment => `
+                    <div class="comment">
+                        <p>${comment.content}</p>
+                        <p class="meta">Posted by ${comment.id} on: ${comment.timestamp}</p>
+                    </div>
+                `).join('');
+
+                threadElement.innerHTML = `
+                    <h5>${thread.title}</h5>
+                    <p>${thread.content}</p>
+                    <p class="meta">Posted by ${thread.id} on: ${thread.timestamp}</p>
+                    <div>
+                        <textarea class="form-control mb-2" placeholder="Add a comment" id="comment-${index}"></textarea>
+                        <button class="btn btn-secondary btn-sm" onclick="postComment(${index}, document.getElementById('comment-${index}').value)">Comment</button>
+                    </div>
+                    ${commentSection}
+                `;
+
+                threadsContainer.appendChild(threadElement);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderThreads);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

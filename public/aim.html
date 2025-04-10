@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Aim</title>
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #1976D2, #64B5F6);
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px;
+      background: #1565C0;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      margin: 50px auto;
+      padding: 30px;
+      width: 80%;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .container h2 {
+      font-size: 2.5rem;
+      color: #1976D2;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .container p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .container .list {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+
+    .container .list li {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #333;
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .container .list li::before {
+      content: '\2713'; /* Checkmark */
+      color: #1976D2;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #1565C0;
+      color: white;
+      margin-top: 50px;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer p {
+      font-size: 1rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Aim</h1>
+    <p>Empowering AMU Students Through Connection</p>
+  </header>
+
+  <div class="container">
+    <h2>Our Vision</h2>
+    <p>Our mission is to bridge the gap between students and foster a sense of community within AMU. We believe in the power of collaboration and knowledge-sharing to create an environment where students thrive academically and socially.</p>
+
+    <h2>What We Strive For</h2>
+    <ul class="list">
+      <li>To create a platform that unites students across all departments and faculties of AMU.</li>
+      <li>To offer a safe and private environment where students can share ideas and ask questions.</li>
+      <li>To enable seamless discussions through innovative threaded posts and comments.</li>
+      <li>To ensure every student feels heard and has the opportunity to contribute without fear of judgment or breach of privacy.</li>
+    </ul>
+
+    <h2>Looking Ahead</h2>
+    <p>As we grow, we aim to integrate more advanced features and tools that will make the platform even more interactive and resourceful for students. Together, we can build a stronger AMU community, one post at a time.</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 ZED: AMU Community Platform. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
