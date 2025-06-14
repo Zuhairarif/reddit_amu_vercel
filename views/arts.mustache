@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AMU's Personal Reddit App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #343a40;
+    }
+    .navbar-brand, .navbar-nav .nav-link {
+      color: #ffffff !important;
+    }
+    .thread-container {
+      margin-top: 20px;
+    }
+    .thread {
+      padding: 15px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      background-color: #ffffff;
+      margin-bottom: 15px;
+    }
+    .thread .meta {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    .comment {
+      margin-left: 20px;
+      padding: 10px;
+      border-left: 3px solid #dee2e6;
+      margin-top: 10px;
+    }
+    footer {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+    }
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+    }
+    .logo-image {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 100px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="logo/arts.jpg" style="height: 100px; width: 400px;" alt="Logo" class="logo-image">
+
+  <!-- Tagline -->
+  <header class="bg-light py-3 text-center">
+    <h1 class="display-5">AMU's Personal Reddit App</h1>
+    <p class="lead">We promote freedom of speech and anonymous discussions</p>
+  </header>
+
+  <div class="container thread-container">
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+      <h3>Search Discussions</h3>
+      <input type="text" id="search-bar" class="form-control" placeholder="Search threads or comments..." oninput="filterContent()">
+    </div>
+
+    <!-- Search Results -->
+    <div class="mb-4" id="search-results" style="display: none;">
+      <h3>Search Results</h3>
+      <div id="results-container"></div>
+    </div>
+
+    <!-- New Thread Section -->
+    <div class="mb-4">
+      <h3>Start a New Discussion</h3>
+      <form action="/love" method="POST">
+        <div class="mb-3">
+          <label for="thread-title" class="form-label">Question</label>
+          <input type="text" class="form-control" name="title" placeholder="Ask your question" required />
+        </div>
+        <div class="mb-3">
+          <label for="thread-content" class="form-label">Details</label>
+          <textarea class="form-control" name="content" rows="3" placeholder="Provide some details about your question" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+      </form>
+    </div>
+
+    <!-- Recent Discussions -->
+    <h3>Recent Discussions</h3>
+    {{#threads}}
+    <div class="thread">
+      <h5>{{title}}</h5>
+      <p>{{content}}</p>
+      <p class="meta">Posted by User-{{id}} on: {{timestamp}}</p>
+
+      <form method="POST" action="/comment">
+       <input type="hidden" name="threadId" value="{{id}}">
+
+        <div class="mb-2">
+          <textarea name="comment" class="form-control" placeholder="Add a comment" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-secondary btn-sm">Comment</button>
+      </form>
+
+      {{#comments}}
+      <div class="comment">
+        <p>{{content}}</p>
+        <p class="meta">Posted by {{id}} on: {{timestamp}}</p>
+      </div>
+      {{/comments}}
+    </div>
+    {{/threads}}
+
+  </div>
+
+  <footer>
+    <p>&copy; 2025 AMU's Personal Reddit App. All rights reserved.</p>
+  </footer>
+
+  <script>
+    function highlightText(text, query) {
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    function filterContent() {
+      const query = document.getElementById('search-bar').value.trim().toLowerCase();
+      const resultsContainer = document.getElementById('results-container');
+      const searchResults = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+
+      if (query) {
+        searchResults.style.display = 'block';
+        // Filter logic must be handled server-side or using embedded JS with all threads if needed.
+      } else {
+        searchResults.style.display = 'none';
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
