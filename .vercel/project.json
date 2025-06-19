@@ -1,1 +1,15 @@
-{"projectId":"prj_t0eLbwXlQW8UlIsTgHhIkqXByEZB","orgId":"team_S66sVE6N59KbBhxNxKSEVVRZ"}
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/app.js"
+    }
+  ]
+}
